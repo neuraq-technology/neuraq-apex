@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
-import User from "@/models/User";
 import bcrypt from "bcryptjs";
 import { login } from "@/lib/auth";
 
 export async function POST(request: Request) {
     try {
         await dbConnect();
+        const User = (await import("@/models/User")).default;
         const { email, password } = await request.json();
 
         // Validate input
