@@ -1,16 +1,15 @@
 import { NextResponse } from "next/server";
+import dbConnect from "@/lib/db";
+import User from "@/models/User";
 import { getSession } from "@/lib/auth";
+import bcrypt from "bcryptjs";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function PUT(req: Request) {
     try {
-        const { default: dbConnect } = await import("@/lib/db");
         await dbConnect();
-
-        const { default: bcrypt } = await import("bcryptjs");
-        const User = (await import("@/models/User")).default;
 
         // precise session verification
         const session: any = await getSession();

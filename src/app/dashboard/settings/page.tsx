@@ -27,7 +27,10 @@ export default function SettingsPage() {
         e.preventDefault();
         setIsLoading(true);
 
-        if (formData.newPassword && formData.newPassword !== formData.confirmPassword) {
+        const newPass = formData.newPassword || "";
+        const confirmPass = formData.confirmPassword || "";
+
+        if (newPass && newPass !== confirmPass) {
             toast.error("New passwords do not match");
             setIsLoading(false);
             return;
@@ -95,7 +98,7 @@ export default function SettingsPage() {
                                     id="currentPassword"
                                     name="currentPassword"
                                     type="password"
-                                    value={formData.currentPassword}
+                                    value={formData.currentPassword || ""}
                                     onChange={handleChange}
                                     required
                                     className="bg-zinc-950/50 border-zinc-800 focus:border-[#30D411] focus:ring-1 focus:ring-[#30D411]/20 text-white h-10 text-sm transition-all"
@@ -111,7 +114,7 @@ export default function SettingsPage() {
                                     id="newEmail"
                                     name="newEmail"
                                     type="email"
-                                    value={formData.newEmail}
+                                    value={formData.newEmail || ""}
                                     onChange={handleChange}
                                     className="bg-zinc-950/50 border-zinc-800 focus:border-[#30D411] focus:ring-1 focus:ring-[#30D411]/20 text-white h-10 text-sm transition-all"
                                     placeholder="your-email@example.com"
@@ -126,7 +129,7 @@ export default function SettingsPage() {
                                         id="newPassword"
                                         name="newPassword"
                                         type="password"
-                                        value={formData.newPassword}
+                                        value={formData.newPassword || ""}
                                         onChange={handleChange}
                                         className="bg-zinc-950/50 border-zinc-800 focus:border-[#30D411] focus:ring-1 focus:ring-[#30D411]/20 text-white h-10 text-sm transition-all"
                                         placeholder="Min. 6 characters"
@@ -138,7 +141,7 @@ export default function SettingsPage() {
                                         id="confirmPassword"
                                         name="confirmPassword"
                                         type="password"
-                                        value={formData.confirmPassword}
+                                        value={formData.confirmPassword || ""}
                                         onChange={handleChange}
                                         className="bg-zinc-950/50 border-zinc-800 focus:border-[#30D411] focus:ring-1 focus:ring-[#30D411]/20 text-white h-10 text-sm transition-all"
                                         placeholder="Re-enter new password"
