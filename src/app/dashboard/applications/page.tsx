@@ -13,7 +13,7 @@ export default function ApplicationsPage() {
                 const res = await fetch('/api/applications');
                 const data = await res.json();
                 if (data.success) {
-                    setApplications(data.da);
+                    setApplications(data.data || []);
                 }
             } catch (error) {
                 console.error('Failed to fetch applications', error);

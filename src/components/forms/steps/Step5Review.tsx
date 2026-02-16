@@ -84,9 +84,9 @@ export default function Step5Review() {
     );
 
     const Field = ({ label, value }: { label: string; value: any }) => (
-        <div>
+        <div className="w-full">
             <span className="text-zinc-500 block">{label}</span>
-            <span className="text-zinc-200">{value || "N/A"}</span>
+            <span className="text-zinc-200 break-words">{value || "N/A"}</span>
         </div>
     );
 
@@ -134,11 +134,11 @@ export default function Step5Review() {
                     <Field label="Prototype" value={data.technical?.existingPrototype} />
                     <Field label="Tech Co-Founder" value={data.technical?.technicalCoFounder} />
                     <Field label="Dev Status" value={data.technical?.developmentStatus} />
-                    <div className="col-span-2">
+                    <div className="col-span-1 md:col-span-2">
                         <span className="text-zinc-500 block">Core Features</span>
-                        <pre className="text-zinc-200 whitespace-pre-wrap font-sans">{data.technical?.coreFeatures || "N/A"}</pre>
+                        <pre className="text-zinc-200 whitespace-pre-wrap font-sans break-words">{data.technical?.coreFeatures || "N/A"}</pre>
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-1 md:col-span-2">
                         <span className="text-zinc-500 block">Requirements</span>
                         <div className="flex flex-wrap gap-2 mt-1">
                             {data.technical?.requirements?.map((req) => (
@@ -152,22 +152,29 @@ export default function Step5Review() {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div className="flex items-start space-x-3 p-4 border border-zinc-800 rounded-lg bg-zinc-900/30">
+                <div className="flex items-start space-x-3 p-4 border border-zinc-800 rounded-lg bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors group">
                     <Checkbox
                         id="confirmation"
                         checked={watch("confirmation")}
                         onCheckedChange={(checked) => setValue("confirmation", checked as boolean)}
-                        className="data-[state=checked]:bg-[#30D411] data-[state=checked]:text-black border-zinc-700 mt-1"
+                        className="data-[state=checked]:bg-[#30D411] data-[state=checked]:text-black border-zinc-600 mt-1Group-hover:border-[#30D411] transition-colors"
                     />
-                    <div className="space-y-1 leading-none">
+                    <div className="space-y-2 leading-none">
                         <Label
                             htmlFor="confirmation"
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-zinc-200 group-hover:text-white transition-colors"
                         >
                             I confirm that the information provided is accurate and complete.
                         </Label>
                         <p className="text-xs text-zinc-500">
-                            By submitting this application, you agree to our terms and conditions.
+                            By submitting this application, you agree to our{" "}
+                            <a href="/terms" target="_blank" className="text-[#30D411] hover:underline">
+                                Terms and Conditions
+                            </a>{" "}
+                            and{" "}
+                            <a href="/privacy-policy" target="_blank" className="text-[#30D411] hover:underline">
+                                Privacy Policy
+                            </a>.
                         </p>
                     </div>
                 </div>
