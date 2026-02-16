@@ -57,7 +57,7 @@ export function AppNavbar() {
                                 key={`mobile-link-${idx}`}
                                 href={item.link}
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                className="relative text-neutral-600 dark:text-neutral-300">
+                                className="relative text-zinc-400 hover:text-[#30D411] transition-all duration-200 w-full text-center py-3 text-lg font-medium active:scale-95 transform border border-transparent hover:border-[#30D411]/50 hover:bg-[#30D411]/10 rounded-md">
                                 <span className="block">{item.name}</span>
                             </Link>
                         ))}

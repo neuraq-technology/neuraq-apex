@@ -8,6 +8,7 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 
@@ -202,11 +203,12 @@ export const MobileNavMenu = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={{ opacity: 0, y: -20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.95 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
           className={cn(
-            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white px-4 py-8 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] dark:bg-neutral-950",
+            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-center justify-start gap-4 rounded-lg bg-black px-4 py-8 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] dark:bg-black border border-[#30D411]/20 origin-top",
             className,
           )}
         >
@@ -224,10 +226,36 @@ export const MobileNavToggle = ({
   isOpen: boolean;
   onClick: () => void;
 }) => {
-  return isOpen ? (
-    <IconX className="text-white dark:text-white" onClick={onClick} />
-  ) : (
-    <IconMenu2 className="text-white dark:text-white" onClick={onClick} />
+  return (
+    <motion.div
+      whileTap={{ scale: 0.9 }}
+      onClick={onClick}
+      className="cursor-pointer"
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        {isOpen ? (
+          <motion.div
+            key="close"
+            initial={{ opacity: 0, rotate: -90 }}
+            animate={{ opacity: 1, rotate: 0 }}
+            exit={{ opacity: 0, rotate: 90 }}
+            transition={{ duration: 0.2 }}
+          >
+            <IconX className="text-white dark:text-white" />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="open"
+            initial={{ opacity: 0, rotate: 90 }}
+            animate={{ opacity: 1, rotate: 0 }}
+            exit={{ opacity: 0, rotate: -90 }}
+            transition={{ duration: 0.2 }}
+          >
+            <IconMenu2 className="text-white dark:text-white" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
@@ -245,14 +273,23 @@ export const NavbarLogo = () => {
       clearTimeout(timeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout(() => {
-      clickCountRef.current = 0;
-    }, 500); // 500ms timeout to reset clicks
-
-    if (clickCountRef.current === 3) {
+    if (clickCountRef.current === 5) {
       router.push("/dashboard");
       clickCountRef.current = 0;
+      return;
     }
+
+    timeoutRef.current = setTimeout(() => {
+      // If it wasn't a 5-click combo (i.e. just 1 or fewer than 5), go home
+      if (clickCountRef.current < 5) {
+        if (window.location.pathname === "/") {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          router.push("/");
+        }
+      }
+      clickCountRef.current = 0;
+    }, 400); // 400ms delay to detect multi-clicks
   };
 
   return (
@@ -260,11 +297,13 @@ export const NavbarLogo = () => {
       onClick={handleLogoClick}
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black cursor-pointer"
     >
-      <img
-        src="https://assets.aceternity.com/logo-dark.png"
+      <Image
+        src="/logo/logo.png"
         alt="logo"
-        width={30}
-        height={30}
+        width={40}
+        height={40}
+        unoptimized
+        className="w-8 h-8 md:w-10 md:h-10"
       />
     </div>
   );
