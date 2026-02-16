@@ -1,22 +1,27 @@
-import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/db';
-import Application from '@/models/Application';
-import { applicationSchema } from '@/lib/validations/application';
+import { NextResponse } from "next/server";
+import dbConnect from "@/lib/db";
+import Application from "@/models/Application";
+import { applicationSchema } from "@/lib/validations/application";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
-export async function GET(req: Request) {
+export async function GET() {
     try {
         await dbConnect();
 
-        // Fetch all applications, sorted by submission date (newest first)
-        const applications = await Application.find({}).sort({ createdAt: -1 });
+        const applications = await Application.find({})
+            .sort({ createdAt: -1 });
 
-        return NextResponse.json({ success: true, da: applications });
+        return NextResponse.json({
+            success: true,
+            data: applications,
+        });
     } catch (error) {
-        console.error('Error fetching applications:', error);
+        console.error("Error fetching applications:", error);
+
         return NextResponse.json(
-            { success: false, message: 'Internal Server Error' },
+            { success: false, message: "Internal Server Error" },
             { status: 500 }
         );
     }
@@ -28,29 +33,37 @@ export async function POST(req: Request) {
 
         const body = await req.json();
 
-        const validationResult = applicationSchema.safeParse(body);
+        const validationResult =
+            applicationSchema.safeParse(body);
 
         if (!validationResult.success) {
             return NextResponse.json(
-                { success: false, errors: validationResult.error.flatten() },
+                {
+                    success: false,
+                    errors:
+                        validationResult.error.flatten(),
+                },
                 { status: 400 }
             );
         }
 
-        const application = await Application.create(body);
+        const application =
+            await Application.create(body);
 
         return NextResponse.json(
-            { success: true, applicationId: application._id },
+            {
+                success: true,
+                applicationId: application._id,
+            },
             { status: 201 }
         );
     } catch (error: any) {
-        console.error('Submission error:', error);
+        console.error("Submission error:", error);
+
         return NextResponse.json(
             {
                 success: false,
-                message: 'Internal Server Error',
-                error: error.message, // For debugging
-                details: error.errors // Mongoose validation errors
+                message: "Internal Server Error",
             },
             { status: 500 }
         );
