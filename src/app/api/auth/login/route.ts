@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/db";
-import bcrypt from "bcryptjs";
-import { login } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function POST(request: Request) {
     try {
+        const { default: dbConnect } = await import("@/lib/db");
         await dbConnect();
+
+        const { default: bcrypt } = await import("bcryptjs");
+        const { login } = await import("@/lib/auth");
         const User = (await import("@/models/User")).default;
+
         const { email, password } = await request.json();
 
         // Validate input
