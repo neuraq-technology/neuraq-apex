@@ -33,7 +33,7 @@ export default function ApexPartnerPage() {
                     <ScrollAnimationWrapper variant="slideLeft" className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800">
                             <Users className="w-10 h-10 text-[#30D411] mb-4" />
-                            <h3 className="text-white font-bold mb-2">Board Seat</h3>
+                            <h3 className="text-white font-bold mb-2">Strategic Board Partner</h3>
                             <p className="text-zinc-400 text-sm">We are fully committed to your long-term success.</p>
                         </div>
                         <div className="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800">

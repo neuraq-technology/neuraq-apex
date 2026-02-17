@@ -3,6 +3,24 @@
 import React, { useRef, useEffect, useState, createElement, useMemo, useCallback, memo } from "react";
 
 export const VaporizeLoader = () => {
+    const [fontSize, setFontSize] = useState("40px");
+
+    useEffect(() => {
+        const updateSize = () => {
+            if (window.innerWidth < 640) {
+                setFontSize("40px");
+            } else if (window.innerWidth < 1024) {
+                setFontSize("60px");
+            } else {
+                setFontSize("80px");
+            }
+        };
+
+        updateSize();
+        window.addEventListener('resize', updateSize);
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
+
     return (
         <div className='bg-black fixed inset-0 z-[99999] flex items-center justify-center font-bold'>
             <div className="w-full h-full relative">
@@ -10,7 +28,7 @@ export const VaporizeLoader = () => {
                     texts={["Apex"]}
                     font={{
                         fontFamily: "Inter, sans-serif",
-                        fontSize: "80px",
+                        fontSize: fontSize,
                         fontWeight: 700
                     }}
                     color="#30D411"
